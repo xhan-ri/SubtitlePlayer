@@ -1,19 +1,19 @@
 package org.xhan.subtitleplayer;
 
 import android.app.Activity;
-import android.app.ActionBar;
 import android.app.Fragment;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
+
+import org.xhan.subtitleplayer.fragment.ControlFragment;
 
 
-
-public class SubTitlePlayerMain extends Activity {
+public class SubTitlePlayerMain extends Activity implements ControlFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +21,7 @@ public class SubTitlePlayerMain extends Activity {
         setContentView(R.layout.activity_sub_title_player_main);
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
+                    .add(R.id.container, ControlFragment.newInstance())
                     .commit();
         }
     }
@@ -46,19 +46,8 @@ public class SubTitlePlayerMain extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
+    @Override
+    public void onFragmentInteraction(Uri uri) {
 
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_sub_title_player_main, container, false);
-            return rootView;
-        }
     }
 }
