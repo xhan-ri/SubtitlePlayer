@@ -20,13 +20,18 @@ public class SubtitleTextView extends TextView {
     }
 
     private void bindToService(Context context) {
-        context.bindService(SubPlayerService.getPlayerBindIntent(context), new PlayerServiceConnection(new IServiceConnectionHandler<PlayerServiceConnection>() {
+        PlayerServiceConnection serviceConnection = new PlayerServiceConnection(new IServiceConnectionHandler<PlayerServiceConnection>() {
             @Override
             public void onConnected(PlayerServiceConnection connection) {
+                connection.register();
                 connection.play();
             }
-        }), Context.BIND_AUTO_CREATE);
+        }, new PlayerServiceConnection.IPlayerUpdateHandler() {
+            @Override
+            public void update(String text) {
+                setText(text);
+            }
+        });
+        context.bindService(SubPlayerService.getPlayerBindIntent(context), serviceConnection, Context.BIND_AUTO_CREATE);
     }
-
-
 }

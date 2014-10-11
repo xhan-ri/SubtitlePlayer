@@ -94,6 +94,7 @@ public class ControlFragment extends Fragment {
                 final ControllerServiceConnection serviceConnection = new ControllerServiceConnection(new IServiceConnectionHandler<ControllerServiceConnection>() {
                     @Override
                     public void onConnected(ControllerServiceConnection connection) {
+                        connection.register();
                         Toast.makeText(getActivity(), "service connected", Toast.LENGTH_LONG).show();
                         connection.openFile("~/.bashrc");
                     }

@@ -4,10 +4,13 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
+import android.os.Binder;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
+import android.os.RemoteException;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,6 +25,7 @@ public class SubPlayerService extends Service {
         public static final int PLAYER_REGISTER = 2;
         public static final int CONTROLLER_OPEN_FILE = 3;
         public static final int PLAYER_PLAY = 4;
+        public static final int PLAYER_UPDATE = 5;
     }
 
     public class Constants {
@@ -31,6 +35,7 @@ public class SubPlayerService extends Service {
 
         public static final String MESSAGE_CONTROLLER_OPEN_FILENAME = "MSG_CTL_OPEN_FILENAME";
         public static final String MESSAGE_PLAYER_PLAY = "MSG_PLAYER_PLAY";
+        public static final String MESSAGE_PLAYER_UPDATE = "MSG_PLAYER_UPDATE";
 
     }
 
@@ -40,13 +45,13 @@ public class SubPlayerService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
+        Messenger inputMessenger = null;
         if (isControllerMessenger(intent)) {
-            controllerMessenger = new Messenger(controllerMessageHandler);
-            return controllerMessenger.getBinder();
+            inputMessenger = new Messenger(controllerMessageHandler);
         } else {
-            playerMessenger = new Messenger(playerMessageHandler);
-            return playerMessenger.getBinder();
+            inputMessenger = new Messenger(playerMessageHandler);
         }
+        return inputMessenger.getBinder();
     }
 
     @Override
@@ -131,15 +136,20 @@ public class SubPlayerService extends Service {
 
         @Override
         public void handleMessage(Message msg) {
-            super.handleMessage(msg);
+
             switch (msg.what) {
+                case Messages.CONTROLLER_REGISTER:
+                    controllerMessenger = msg.replyTo;
+                    break;
                 case Messages.CONTROLLER_OPEN_FILE:
                     String filename = msg.getData().getString(Constants.MESSAGE_CONTROLLER_OPEN_FILENAME);
                     Toast.makeText(SubPlayerService.this, "Service: file name to open: " + filename, Toast.LENGTH_LONG).show();
                     break;
+
                 default:
                     break;
             }
+            super.handleMessage(msg);
         }
     };
 
@@ -148,16 +158,34 @@ public class SubPlayerService extends Service {
 
         @Override
         public void handleMessage(Message msg) {
-            super.handleMessage(msg);
+
             switch (msg.what) {
+                case Messages.PLAYER_REGISTER:
+                    playerMessenger = msg.replyTo;
+                    Toast.makeText(SubPlayerService.this, "Service: player registered. player=" + playerMessenger.toString(), Toast.LENGTH_LONG).show();
+                    break;
                 case Messages.PLAYER_PLAY:
                     Toast.makeText(SubPlayerService.this, "Service: start playing...", Toast.LENGTH_LONG).show();
+                    sendUpdateToPlayer("Movie is playing!");
                     break;
                 default:
                     break;
             }
-
+            super.handleMessage(msg);
 
         }
     };
+
+    private void sendUpdateToPlayer(String text) {
+        Message msg = Message.obtain(null, Messages.PLAYER_UPDATE);
+        Bundle data = new Bundle();
+        data.putString(Constants.MESSAGE_PLAYER_UPDATE, text);
+        msg.setData(data);
+
+        try {
+            playerMessenger.send(msg);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
