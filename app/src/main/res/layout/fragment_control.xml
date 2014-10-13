@@ -52,4 +52,23 @@
         android:layout_below="@+id/ctrl_stop_service_btn"
         android:layout_alignRight="@+id/ctrl_stop_service_btn"
         android:layout_alignEnd="@+id/ctrl_stop_service_btn" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Init Player"
+        android:id="@+id/ctrl_init_player_btn"
+        android:layout_below="@+id/ctrl_bind_btn"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="43dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Remove player"
+        android:id="@+id/ctrl_remove_player_btn"
+        android:layout_alignBottom="@+id/ctrl_init_player_btn"
+        android:layout_alignLeft="@+id/ctrl_unbind_btn"
+        android:layout_alignStart="@+id/ctrl_unbind_btn" />
 </RelativeLayout>

@@ -3,6 +3,7 @@ package org.xhan.subtitleplayer.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -38,6 +39,7 @@ public class ControlFragment extends Fragment {
     private View rootView;
 
     private OnFragmentInteractionListener mListener;
+    private ControllerServiceConnection controllerServiceConnection;
 
     /**
      * Use this factory method to create a new instance of
@@ -90,27 +92,38 @@ public class ControlFragment extends Fragment {
         bindButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                bindService();
+            }
+        });
 
-                final ControllerServiceConnection serviceConnection = new ControllerServiceConnection(new IServiceConnectionHandler<ControllerServiceConnection>() {
-                    @Override
-                    public void onConnected(ControllerServiceConnection connection) {
-                        connection.register();
-                        Toast.makeText(getActivity(), "service connected", Toast.LENGTH_LONG).show();
-                        connection.openFile("~/.bashrc");
-                    }
-                });
-                getActivity().bindService(SubPlayerService.getControllerBindIntent(getActivity()), serviceConnection, Context.BIND_AUTO_CREATE);
+        Button unbindButton = (Button)rootView.findViewById(R.id.ctrl_unbind_btn);
+        unbindButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                unbindService();
+            }
+        });
 
+        Button initPlayerButton = (Button)rootView.findViewById(R.id.ctrl_init_player_btn);
+        initPlayerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (controllerServiceConnection != null) {
+                    controllerServiceConnection.initPlayer();
+                }
+            }
+        });
+
+        Button removePlayerButton = (Button)rootView.findViewById(R.id.ctrl_remove_player_btn);
+        removePlayerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (controllerServiceConnection != null) {
+                    controllerServiceConnection.removePlayer();
+                }
             }
         });
         return rootView;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override
@@ -136,7 +149,7 @@ public class ControlFragment extends Fragment {
      * to the activity and potentially other fragments contained in that
      * activity.
      * <p>
-     * See the Android Training lesson <a href=
+     * See theControllerServiceConnection Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
@@ -145,6 +158,32 @@ public class ControlFragment extends Fragment {
         public void onFragmentInteraction(Uri uri);
     }
 
+    private void bindService() {
+        clearServiceBinding();
+        controllerServiceConnection = new ControllerServiceConnection(new IServiceConnectionHandler<ControllerServiceConnection>() {
+            @Override
+            public void onConnected(ControllerServiceConnection connection) {
+                connection.register();
+                Toast.makeText(getActivity(), "service connected", Toast.LENGTH_LONG).show();
+            }
+        });
 
+        final ServiceConnection finalConnection = controllerServiceConnection;
+        getActivity().bindService(SubPlayerService.getControllerBindIntent(getActivity()), finalConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    private void clearServiceBinding() {
+        if (controllerServiceConnection == null) {
+            return;
+        } else {
+            unbindService();
+        }
+    }
+    private void unbindService() {
+        if (controllerServiceConnection != null) {
+            getActivity().unbindService(controllerServiceConnection);
+            controllerServiceConnection = null;
+        }
+    }
 
 }

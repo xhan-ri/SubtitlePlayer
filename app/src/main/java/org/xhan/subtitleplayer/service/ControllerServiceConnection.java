@@ -27,6 +27,14 @@ public class ControllerServiceConnection extends SubPlayerServiceConnection {
         sendMessage(SubPlayerService.Messages.CONTROLLER_OPEN_FILE, data, null);
     }
 
+    public void initPlayer() {
+        sendMessage(SubPlayerService.Messages.CONTROLLER_INIT_PLAYER);
+    }
+
+    public void removePlayer() {
+        sendMessage(SubPlayerService.Messages.CONTROLLER_REMOVE_PLAYER);
+    }
+
     @Override
     public int getRegisterMessageId() {
         return SubPlayerService.Messages.CONTROLLER_REGISTER;
