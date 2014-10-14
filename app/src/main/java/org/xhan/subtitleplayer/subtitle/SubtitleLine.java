@@ -7,7 +7,8 @@ import java.sql.Timestamp;
  */
 public class SubtitleLine {
     private int index;
-    private Timestamp timestamp;
+    private Timestamp from;
+    private Timestamp to;
     private String content;
 
     public int getIndex() {
@@ -18,13 +19,6 @@ public class SubtitleLine {
         this.index = index;
     }
 
-    public Timestamp getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(Timestamp timestamp) {
-        this.timestamp = timestamp;
-    }
 
     public String getContent() {
         return content;
@@ -34,13 +28,19 @@ public class SubtitleLine {
         this.content = content;
     }
 
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("SubtitleLine{");
-        sb.append("index=").append(index);
-        sb.append(", timestamp=").append(timestamp);
-        sb.append(", content='").append(content).append('\'');
-        sb.append('}');
-        return sb.toString();
+    public Timestamp getFrom() {
+        return from;
+    }
+
+    public void setFrom(Timestamp from) {
+        this.from = from;
+    }
+
+    public Timestamp getTo() {
+        return to;
+    }
+
+    public void setTo(Timestamp to) {
+        this.to = to;
     }
 }

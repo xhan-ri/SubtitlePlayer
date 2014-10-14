@@ -18,7 +18,16 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.google.common.io.ByteStreams;
+import com.google.common.io.Files;
+
 import org.xhan.subtitleplayer.view.SubtitleTextView;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.List;
 
 public class SubPlayerService extends Service {
     boolean started =false;
@@ -215,5 +224,8 @@ public class SubPlayerService extends Service {
             windowManager.removeView(playerView);
             playerView = null;
         }
+    }
+
+    private void openSubtitle(String filePath) {
     }
 }

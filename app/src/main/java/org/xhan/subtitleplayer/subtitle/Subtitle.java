@@ -1,5 +1,6 @@
 package org.xhan.subtitleplayer.subtitle;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -7,4 +8,10 @@ import java.util.List;
  */
 public class Subtitle {
     List<SubtitleLine> lines;
+    public Subtitle() {
+        lines = new LinkedList<SubtitleLine>();
+    }
+    public void addLine(SubtitleLine line) {
+        lines.add(line);
+    }
 }
