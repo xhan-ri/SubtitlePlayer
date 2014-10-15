@@ -1,14 +1,18 @@
 package org.xhan.subtitleplayer.subtitle;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
+
 import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * Created by xhan on 10/9/14.
  */
 public class SubtitleLine {
     private int index;
-    private Timestamp from;
-    private Timestamp to;
+    private long start;
+    private long span;
     private String content;
 
     public int getIndex() {
@@ -28,19 +32,33 @@ public class SubtitleLine {
         this.content = content;
     }
 
-    public Timestamp getFrom() {
-        return from;
+    public void appendContent(String content) {
+        this.content += System.getProperty("line.separator") + content;
     }
 
-    public void setFrom(Timestamp from) {
-        this.from = from;
+    public long getStart() {
+        return start;
     }
 
-    public Timestamp getTo() {
-        return to;
+    public void setStart(long start) {
+        this.start = start;
     }
 
-    public void setTo(Timestamp to) {
-        this.to = to;
+    public long getSpan() {
+        return span;
+    }
+
+    public void setSpan(long span) {
+        this.span = span;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("index", index)
+                .add("start", start)
+                .add("span", span)
+                .add("content", content)
+                .toString();
     }
 }

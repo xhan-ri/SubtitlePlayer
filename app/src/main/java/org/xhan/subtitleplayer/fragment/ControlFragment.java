@@ -7,6 +7,8 @@ import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
+import android.util.TimeUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,13 @@ import org.xhan.subtitleplayer.R;
 import org.xhan.subtitleplayer.service.ControllerServiceConnection;
 import org.xhan.subtitleplayer.service.IServiceConnectionHandler;
 import org.xhan.subtitleplayer.service.SubPlayerService;
+import org.xhan.subtitleplayer.subtitle.SubtitleLine;
+import org.xhan.subtitleplayer.subtitle.SubtitleManager;
+
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -65,6 +74,7 @@ public class ControlFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        foo();
     }
 
     @Override
@@ -184,6 +194,13 @@ public class ControlFragment extends Fragment {
             getActivity().unbindService(controllerServiceConnection);
             controllerServiceConnection = null;
         }
+    }
+
+    private void foo() {
+        SubtitleLine line = new SubtitleLine();
+        new SubtitleManager().parseTimeRange("00:23:53,740 --> 00:23:55,739", line);
+        Log.i("DEBUG", line.toString());
+
     }
 
 }

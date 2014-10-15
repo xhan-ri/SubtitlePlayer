@@ -14,13 +14,7 @@ import java.nio.charset.Charset;
  * Created by xhan on 10/13/14.
  */
 public class SubtitleManager {
-    public enum LineType {
-        INDEX,
-        TIME,
-        CONTENT,
-        END,
-        UNKNOWN
-    }
+
     public Subtitle readSubFile(String filePath, Charset charset) {
         final File subFile = new File(filePath);
         if (!(subFile.exists() && subFile.canRead())) {
@@ -28,47 +22,15 @@ public class SubtitleManager {
         }
         final Subtitle subtitle = new Subtitle();
         final SubtitleLine subtitleLine = new SubtitleLine();
-        LineType lineType = LineType.UNKNOWN;
+        SubtitleLineProcessor lineProcessor = new SubtitleLineProcessor();
         try {
-            Files.readLines(subFile, charset, new LineProcessor<Object>() {
-                @Override
-                public boolean processLine(String line) throws IOException {
-                    if (isEndOfItem(line)) {
-                        final SubtitleLine finalLine = subtitleLine;
-                        subtitle.addLine(finalLine);
-                    } else {
-
-                    }
-                    return true;
-                }
-
-                @Override
-                public Object getResult() {
-                    return null;
-                }
-            });
+            Files.readLines(subFile, charset, lineProcessor);
         } catch (IOException e) {
            throw new RuntimeException(e);
         }
-        return null;
+        subtitle.setLines(lineProcessor.getResult());
+        return subtitle;
     }
 
-    private LineType getNextLineType(LineType lineType) {
-        switch (lineType) {
-            case INDEX:
-                return LineType.TIME;
-            case TIME:
-                return LineType.CONTENT;
-            case CONTENT:
-                return LineType.CONTENT;
-            case END:
-                return LineType.INDEX;
-            default:
-                return LineType.INDEX;
-        }
-    }
 
-    private boolean isEndOfItem(String line) {
-        return Strings.isNullOrEmpty(line);
-    }
 }
