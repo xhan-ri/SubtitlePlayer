@@ -19,9 +19,11 @@ import org.xhan.subtitleplayer.R;
 import org.xhan.subtitleplayer.service.ControllerServiceConnection;
 import org.xhan.subtitleplayer.service.IServiceConnectionHandler;
 import org.xhan.subtitleplayer.service.SubPlayerService;
+import org.xhan.subtitleplayer.subtitle.Subtitle;
 import org.xhan.subtitleplayer.subtitle.SubtitleLine;
 import org.xhan.subtitleplayer.subtitle.SubtitleManager;
 
+import java.nio.charset.Charset;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -197,9 +199,8 @@ public class ControlFragment extends Fragment {
     }
 
     private void foo() {
-        SubtitleLine line = new SubtitleLine();
-        new SubtitleManager().parseTimeRange("00:23:53,740 --> 00:23:55,739", line);
-        Log.i("DEBUG", line.toString());
+        Subtitle subtitle = new SubtitleManager().readSubFile("/sdcard/en.srt", Charset.forName("UTF-8"));
+        Log.i("DEBUG", subtitle.toString());
 
     }
 

@@ -79,7 +79,11 @@ public class SubtitleLineProcessor implements LineProcessor<List<SubtitleLine>> 
     }
 
     private void parseIndexLine(String line) {
-        subLine.setIndex(Integer.parseInt(line));
+        System.out.println("Index Line:" + line);
+        Byte b = Byte.valueOf((byte)line.charAt(0));
+        System.out.println("numValue=" + b.intValue());
+        System.out.println("FEFF=" + 0xFEFF);
+        subLine.setIndex(Integer.parseInt(line.trim()));
     }
 
     private void parseContent(String line) {
