@@ -7,6 +7,7 @@ import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Handler;
 import android.util.Log;
 import android.util.TimeUtils;
 import android.view.LayoutInflater;
@@ -199,7 +200,7 @@ public class ControlFragment extends Fragment {
     }
 
     private void foo() {
-        Subtitle subtitle = new SubtitleManager().readSubFile("/sdcard/en.srt", Charset.forName("UTF-8"));
+        Subtitle subtitle = new SubtitleManager(getActivity()).readSubFile("/sdcard/en.srt", Charset.forName("UTF-8"));
         Log.i("DEBUG", subtitle.toString());
 
     }

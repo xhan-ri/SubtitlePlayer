@@ -36,6 +36,7 @@ public class SubtitleLineProcessor implements LineProcessor<List<SubtitleLine>> 
         if (isEndOfItem(line)) {
             subLineList.add(subLine);
             subLine = new SubtitleLine();
+	        lineType = LineType.END;
         } else {
             lineType = getNextLineType(lineType);
             switch (lineType) {
@@ -56,6 +57,11 @@ public class SubtitleLineProcessor implements LineProcessor<List<SubtitleLine>> 
 
     @Override
     public List<SubtitleLine> getResult() {
+	    if (subLine != null) {
+		    subLineList.add(subLine);
+		    subLine = null;
+		    lineType = LineType.UNKNOWN;
+	    }
         return subLineList;
     }
 
@@ -79,10 +85,7 @@ public class SubtitleLineProcessor implements LineProcessor<List<SubtitleLine>> 
     }
 
     private void parseIndexLine(String line) {
-        System.out.println("Index Line:" + line);
         Byte b = Byte.valueOf((byte)line.charAt(0));
-        System.out.println("numValue=" + b.intValue());
-        System.out.println("FEFF=" + 0xFEFF);
         subLine.setIndex(Integer.parseInt(line.trim()));
     }
 

@@ -1,5 +1,7 @@
 package org.xhan.subtitleplayer.subtitle;
 
+import android.text.TextUtils;
+
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
@@ -33,7 +35,11 @@ public class SubtitleLine {
     }
 
     public void appendContent(String content) {
-        this.content += System.getProperty("line.separator") + content;
+	    if (TextUtils.isEmpty(this.content)) {
+		    this.content = content;
+	    } else {
+		    this.content += System.getProperty("line.separator") + content;
+	    }
     }
 
     public long getStart() {
