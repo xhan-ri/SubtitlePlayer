@@ -1,5 +1,7 @@
 package org.xhan.subtitleplayer.subtitle;
 
+import android.util.Log;
+
 import com.google.common.base.Strings;
 import com.google.common.io.LineProcessor;
 
@@ -85,8 +87,8 @@ public class SubtitleLineProcessor implements LineProcessor<List<SubtitleLine>> 
     }
 
     private void parseIndexLine(String line) {
-        Byte b = Byte.valueOf((byte)line.charAt(0));
-        subLine.setIndex(Integer.parseInt(line.trim()));
+	    Log.i("SubtitleLineProcessor", line);
+	    subLine.setIndex(Integer.parseInt(line.trim()));
     }
 
     private void parseContent(String line) {

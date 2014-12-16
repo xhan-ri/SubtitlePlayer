@@ -23,6 +23,7 @@ import org.xhan.subtitleplayer.service.SubPlayerService;
 import org.xhan.subtitleplayer.subtitle.Subtitle;
 import org.xhan.subtitleplayer.subtitle.SubtitleLine;
 import org.xhan.subtitleplayer.subtitle.SubtitleManager;
+import org.xhan.subtitleplayer.subtitle.SubtitlePlayer;
 
 import java.nio.charset.Charset;
 import java.sql.Timestamp;
@@ -77,7 +78,7 @@ public class ControlFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        foo();
+//        foo();
     }
 
     @Override
@@ -89,7 +90,8 @@ public class ControlFragment extends Fragment {
         startServiceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().startService(new Intent(getActivity(), SubPlayerService.class));
+//                getActivity().startService(new Intent(getActivity(), SubPlayerService.class));
+	            foo();
             }
         });
         Button stopServiceButton = (Button)rootView.findViewById(R.id.ctrl_stop_service_btn);
@@ -201,7 +203,7 @@ public class ControlFragment extends Fragment {
 
     private void foo() {
         Subtitle subtitle = new SubtitleManager(getActivity()).readSubFile("/sdcard/en.srt", Charset.forName("UTF-8"));
-        Log.i("DEBUG", subtitle.toString());
+	    SubtitlePlayer player = new SubtitlePlayer(subtitle, getActivity());
 
     }
 
