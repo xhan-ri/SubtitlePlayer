@@ -1,22 +1,17 @@
 package org.xhan.subtitleplayer.subtitle;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.widget.Toast;
 
 import org.xhan.subtitleplayer.SubtitlePlayerApplication;
+import org.xhan.subtitleplayer.dagger.Dagger_MainComponent;
 import org.xhan.subtitleplayer.service.ControllerServiceConnection;
 import org.xhan.subtitleplayer.service.IServiceConnectionHandler;
 import org.xhan.subtitleplayer.service.SubPlayerService;
 
-import java.nio.charset.Charset;
-
 import javax.inject.Inject;
-
-import dagger.ObjectGraph;
 
 /**
  * Created by xhan on 12/15/14.
@@ -31,7 +26,7 @@ public class SubtitlePlayer {
 	Activity activity;
 
 	public SubtitlePlayer(Subtitle subtitle, Activity activity) {
-		SubtitlePlayerApplication.getObjectGraph().inject(this);
+		Dagger_MainComponent.create();
 		this.activity = activity;
 		this.subtitle = subtitle;
 		init();
